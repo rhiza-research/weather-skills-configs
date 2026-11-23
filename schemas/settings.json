@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "settings.yaml",
+  "description": "Tracked non-secret app settings. x-role marks app-input (passed to the app at startup).",
+  "x-schema-version": 1,
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "settings"],
+  "properties": {
+    "schema_version": {"description": "The schema version the file was written for.", "const": 1},
+    "settings": {
+      "description": "Settings keyed by the app's environment variable name.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["TASK_MODEL", "TASK_MODEL_EXTERNAL"],
+      "x-role": "app-input",
+      "properties": {
+        "TASK_MODEL": {"description": "Empty for none.", "type": "string", "default": ""},
+        "TASK_MODEL_EXTERNAL": {"description": "Empty for none.", "type": "string", "default": ""}
+      }
+    }
+  }
+}

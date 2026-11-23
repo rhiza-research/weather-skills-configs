@@ -1,0 +1,20 @@
+repos:
+  - repo: https://github.com/python-jsonschema/check-jsonschema
+    rev: 0.39.0
+    hooks:
+      - id: check-jsonschema
+        name: Validate model files
+        files: ^models/[^/]+\.yaml$
+        args: ["--schemafile", "schemas/model.json"]
+      - id: check-jsonschema
+        name: Validate skill-packs.yaml
+        files: ^skill-packs\.yaml$
+        args: ["--schemafile", "schemas/skill-packs.json"]
+      - id: check-jsonschema
+        name: Validate connections.yaml
+        files: ^connections\.yaml$
+        args: ["--schemafile", "schemas/connections.json"]
+      - id: check-jsonschema
+        name: Validate settings.yaml
+        files: ^settings\.yaml$
+        args: ["--schemafile", "schemas/settings.json"]

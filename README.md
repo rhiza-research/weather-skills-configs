@@ -4,24 +4,25 @@ The definition of the weather-skills-chat app: its models, skill packs, connecti
 
 ## Layout
 
-| Path | Holds | Schema definition |
+| Path | Holds | Schema |
 | --- | --- | --- |
-| `schema.json` | The JSON Schema for every data file, and its version | |
-| `models/<encoded id>.yaml` | One catalog model per file | `#/$defs/model_file` |
-| `skill-packs.yaml` | Skill packs, with pack and skill on/off state | `#/$defs/skill_packs_file` |
-| `connections.yaml` | OpenAI-compatible connections, keyed by base URL | `#/$defs/connections_file` |
-| `settings.yaml` | Tracked non-secret app settings | `#/$defs/settings_file` |
+| `models/<encoded id>.yaml` | One catalog model per file | `schemas/model.json` |
+| `skill-packs.yaml` | Skill packs, with pack and skill on/off state | `schemas/skill-packs.json` |
+| `connections.yaml` | OpenAI-compatible connections, keyed by base URL | `schemas/connections.json` |
+| `settings.yaml` | Tracked non-secret app settings | `schemas/settings.json` |
+
+Install the hook that validates each data file against its schema on commit: `pre-commit install`.
 
 ## Rules
 
 ### Schema version
 
-- `schema.json` carries the version in `x-schema-version`. Every data file names the version it was written for in `schema_version`.
+- Every schema in `schemas/` carries the version in `x-schema-version`. Every data file names the version it was written for in `schema_version`.
 - Adding an optional field keeps the version. A breaking change, such as a rename or removal, bumps it and migrates every data file in the same commit.
 
 ### Roles
 
-The schema marks keys with `x-role`:
+The schemas mark keys with `x-role`:
 
 - `app-input`: given to the app at startup as environment values.
 - `app-state`: set by the harness through the app's API after startup.
@@ -37,7 +38,7 @@ What each file gives the app:
 ### No secrets
 
 - No data file holds a secret value or a `${...}` reference.
-- Connections and settings allow only the non-secret keys the schema names.
+- Connections and settings allow only the non-secret keys their schemas name.
 
 ### Models
 
