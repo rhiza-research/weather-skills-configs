@@ -1,0 +1,5 @@
+schema_version: 1
+connections:
+  https://openrouter.ai/api/v1:
+    model_call_tracing: openrouter
+    prefix_id: open-router-
