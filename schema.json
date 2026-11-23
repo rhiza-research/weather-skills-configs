@@ -1,25 +1,18 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "weather-skills-configs data files",
-  "description": "One schema for every data file. x-files maps each file to its definition. Annotations: x-role marks app-input (passed to the app at startup), app-state (set by the harness through the app API after startup) and eval-metadata (never reaches the app). x-key-order lists an object's keys in file order; keys it does not list, and every key of an object without x-key-order, follow in code point order. x-sort-by names the key a list is sorted by, strictly ascending. x-model-ref marks a model reference: upstream resolves through connections.yaml; any also accepts a model id in models/.",
+  "description": "One schema for every data file; $defs holds one definition per file. x-role marks app-input (passed to the app at startup), app-state (set by the harness through the app API after startup) and eval-metadata (never reaches the app).",
   "x-schema-version": 1,
-  "x-files": {
-    "models/*.yaml": "#/$defs/model_file",
-    "skill-packs.yaml": "#/$defs/skill_packs_file",
-    "connections.yaml": "#/$defs/connections_file",
-    "settings.yaml": "#/$defs/settings_file"
-  },
   "$defs": {
     "schema_version": {
       "description": "The schema version the file was written for.",
       "const": 1
     },
     "model_file": {
-      "description": "One catalog model. The file name is the encoded model id plus .yaml.",
+      "description": "models/<encoded id>.yaml: one catalog model.",
       "type": "object",
       "additionalProperties": false,
       "required": ["schema_version", "model", "eval"],
-      "x-key-order": ["schema_version", "model", "eval"],
       "properties": {
         "schema_version": {"$ref": "#/$defs/schema_version"},
         "model": {"$ref": "#/$defs/catalog_model", "x-role": "app-input"},
@@ -42,21 +35,9 @@
         "organization_id",
         "visibility"
       ],
-      "x-key-order": [
-        "id",
-        "base_model_id",
-        "name",
-        "meta",
-        "params",
-        "access_control",
-        "is_active",
-        "enabled_by_default",
-        "organization_id",
-        "visibility"
-      ],
       "properties": {
         "id": {"type": "string", "pattern": "\\S"},
-        "base_model_id": {"type": "string", "minLength": 1, "x-model-ref": "upstream"},
+        "base_model_id": {"type": "string", "minLength": 1},
         "name": {"type": "string"},
         "meta": {"$ref": "#/$defs/model_meta"},
         "params": {"type": "object"},
@@ -70,19 +51,17 @@
     "model_meta": {
       "type": "object",
       "required": ["profile_image_url", "description", "capabilities"],
-      "x-key-order": ["profile_image_url", "description", "capabilities"],
       "properties": {
         "profile_image_url": {"type": ["string", "null"], "default": "/static/favicon.png"},
         "description": {"type": ["string", "null"], "default": null},
         "capabilities": {"type": ["object", "null"], "default": null},
-        "fallback_model_id": {"type": ["string", "null"], "x-model-ref": "upstream"}
+        "fallback_model_id": {"type": ["string", "null"]}
       }
     },
     "model_eval": {
       "type": "object",
       "additionalProperties": false,
       "required": ["variant"],
-      "x-key-order": ["variant"],
       "properties": {
         "variant": {
           "description": "Experiment name suffix. Null for none.",
@@ -93,16 +72,15 @@
       }
     },
     "skill_packs_file": {
+      "description": "skill-packs.yaml.",
       "type": "object",
       "additionalProperties": false,
       "required": ["schema_version", "skill_packs"],
-      "x-key-order": ["schema_version", "skill_packs"],
       "properties": {
         "schema_version": {"$ref": "#/$defs/schema_version"},
         "skill_packs": {
           "type": "array",
-          "items": {"$ref": "#/$defs/skill_pack"},
-          "x-sort-by": "git_url"
+          "items": {"$ref": "#/$defs/skill_pack"}
         }
       }
     },
@@ -111,7 +89,6 @@
       "type": "object",
       "additionalProperties": false,
       "required": ["git_url", "ref", "enabled_by_default", "is_active", "skills"],
-      "x-key-order": ["git_url", "ref", "enabled_by_default", "is_active", "skills"],
       "properties": {
         "git_url": {
           "description": "The form the app stores: https, no trailing slash, ending in .git.",
@@ -126,7 +103,6 @@
           "description": "Skills whose state the harness enforces. A skill not listed is not checked.",
           "type": "array",
           "items": {"$ref": "#/$defs/skill"},
-          "x-sort-by": "name",
           "x-role": "app-state"
         }
       }
@@ -136,7 +112,6 @@
       "type": "object",
       "additionalProperties": false,
       "required": ["name", "is_active", "enabled_by_default"],
-      "x-key-order": ["name", "is_active", "enabled_by_default"],
       "properties": {
         "name": {"type": "string", "pattern": "\\S"},
         "is_active": {"type": "boolean", "default": true},
@@ -144,10 +119,10 @@
       }
     },
     "connections_file": {
+      "description": "connections.yaml.",
       "type": "object",
       "additionalProperties": false,
       "required": ["schema_version", "connections"],
-      "x-key-order": ["schema_version", "connections"],
       "properties": {
         "schema_version": {"$ref": "#/$defs/schema_version"},
         "connections": {
@@ -160,7 +135,7 @@
       }
     },
     "connection": {
-      "description": "The connection's OPENAI_API_CONFIGS entry. Only these non-secret keys are allowed; only keys that are set are written.",
+      "description": "The connection's OPENAI_API_CONFIGS entry. Only these non-secret keys are allowed.",
       "type": "object",
       "additionalProperties": false,
       "properties": {
@@ -173,10 +148,10 @@
       }
     },
     "settings_file": {
+      "description": "settings.yaml.",
       "type": "object",
       "additionalProperties": false,
       "required": ["schema_version", "settings"],
-      "x-key-order": ["schema_version", "settings"],
       "properties": {
         "schema_version": {"$ref": "#/$defs/schema_version"},
         "settings": {
@@ -186,8 +161,8 @@
           "required": ["TASK_MODEL", "TASK_MODEL_EXTERNAL"],
           "x-role": "app-input",
           "properties": {
-            "TASK_MODEL": {"description": "Empty for none.", "type": "string", "default": "", "x-model-ref": "any"},
-            "TASK_MODEL_EXTERNAL": {"description": "Empty for none.", "type": "string", "default": "", "x-model-ref": "any"}
+            "TASK_MODEL": {"description": "Empty for none.", "type": "string", "default": ""},
+            "TASK_MODEL_EXTERNAL": {"description": "Empty for none.", "type": "string", "default": ""}
           }
         }
       }
