@@ -1,19 +1,16 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "models/<encoded id>.yaml",
-  "description": "One catalog model. x-role marks app-input (passed to the app at startup) and eval-metadata (never reaches the app).",
   "x-schema-version": 1,
   "type": "object",
   "additionalProperties": false,
   "required": ["schema_version", "model", "eval"],
   "properties": {
     "schema_version": {"description": "The schema version the file was written for.", "const": 1},
-    "model": {"$ref": "#/$defs/catalog_model", "x-role": "app-input"},
-    "eval": {"$ref": "#/$defs/model_eval", "x-role": "eval-metadata"}
+    "model": {"$ref": "#/$defs/catalog_model"},
+    "eval": {"$ref": "#/$defs/model_eval"}
   },
   "$defs": {
     "catalog_model": {
-      "description": "One CATALOG_MODELS entry, as weather-skills-chat CatalogModelEntry accepts it.",
       "type": "object",
       "additionalProperties": false,
       "required": [
@@ -24,21 +21,17 @@
         "params",
         "access_control",
         "is_active",
-        "enabled_by_default",
-        "organization_id",
-        "visibility"
+        "enabled_by_default"
       ],
       "properties": {
-        "id": {"type": "string", "pattern": "\\S"},
-        "base_model_id": {"type": "string", "minLength": 1},
+        "id": {"type": "string"},
+        "base_model_id": {"type": "string"},
         "name": {"type": "string"},
         "meta": {"$ref": "#/$defs/model_meta"},
         "params": {"type": "object"},
-        "access_control": {"type": ["object", "null"], "default": null},
-        "is_active": {"type": "boolean", "default": true},
-        "enabled_by_default": {"type": "boolean", "default": true},
-        "organization_id": {"description": "The app stores every catalog model in this organization.", "const": "platform"},
-        "visibility": {"description": "The app stores every catalog model with this visibility.", "const": "public"}
+        "access_control": {"type": ["object", "null"]},
+        "is_active": {"type": "boolean"},
+        "enabled_by_default": {"type": "boolean"}
       }
     },
     "model_meta": {
@@ -47,8 +40,7 @@
       "properties": {
         "profile_image_url": {"type": ["string", "null"], "default": "/static/favicon.png"},
         "description": {"type": ["string", "null"], "default": null},
-        "capabilities": {"type": ["object", "null"], "default": null},
-        "fallback_model_id": {"type": ["string", "null"]}
+        "capabilities": {"type": ["object", "null"], "default": null}
       }
     },
     "model_eval": {
@@ -57,10 +49,7 @@
       "required": ["variant"],
       "properties": {
         "variant": {
-          "description": "Experiment name suffix. Null for none.",
-          "type": ["string", "null"],
-          "pattern": "\\S",
-          "default": null
+          "type": ["string", "null"]
         }
       }
     }

@@ -1,7 +1,5 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "connections.yaml",
-  "description": "OpenAI-compatible connections. x-role marks app-input (passed to the app at startup).",
   "x-schema-version": 1,
   "type": "object",
   "additionalProperties": false,
@@ -9,25 +7,17 @@
   "properties": {
     "schema_version": {"description": "The schema version the file was written for.", "const": 1},
     "connections": {
-      "description": "Connections keyed by base URL without a trailing slash. Key order gives OPENAI_API_BASE_URLS order.",
       "type": "object",
-      "propertyNames": {"pattern": "^https?://\\S*[^/\\s]$"},
-      "additionalProperties": {"$ref": "#/$defs/connection"},
-      "x-role": "app-input"
+      "additionalProperties": {"$ref": "#/$defs/connection"}
     }
   },
   "$defs": {
     "connection": {
-      "description": "The connection's OPENAI_API_CONFIGS entry. Only these non-secret keys are allowed.",
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "enable": {"type": "boolean"},
         "model_call_tracing": {"type": "string"},
-        "model_ids": {"type": "array", "items": {"type": "string"}},
-        "name": {"type": "string"},
-        "prefix_id": {"type": "string"},
-        "tags": {"type": "array"}
+        "prefix_id": {"type": "string"}
       }
     }
   }

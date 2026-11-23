@@ -1,7 +1,5 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "skill-packs.yaml",
-  "description": "Skill packs with pack and skill on/off state. x-role marks app-input (passed to the app at startup) and app-state (set by the harness through the app API after startup).",
   "x-schema-version": 1,
   "type": "object",
   "additionalProperties": false,
@@ -15,30 +13,23 @@
   },
   "$defs": {
     "skill_pack": {
-      "description": "A pack keyed by git_url. git_url, ref and enabled_by_default form its SKILL_PACKS entry.",
       "type": "object",
       "additionalProperties": false,
       "required": ["git_url", "ref", "enabled_by_default", "is_active", "skills"],
       "properties": {
         "git_url": {
-          "description": "The form the app stores: https, no trailing slash, ending in .git.",
-          "type": "string",
-          "pattern": "^https://[^/\\s]+/\\S*[^/\\s]\\.git$",
-          "x-role": "app-input"
+          "type": "string"
         },
-        "ref": {"type": "string", "pattern": "^[0-9a-f]{40}$", "x-role": "app-input"},
-        "enabled_by_default": {"type": "boolean", "default": true, "x-role": "app-input"},
-        "is_active": {"type": "boolean", "default": true, "x-role": "app-state"},
+        "ref": {"type": "string"},
+        "enabled_by_default": {"type": "boolean"},
+        "is_active": {"type": "boolean"},
         "skills": {
-          "description": "Skills whose state the harness enforces. A skill not listed is not checked.",
           "type": "array",
-          "items": {"$ref": "#/$defs/skill"},
-          "x-role": "app-state"
+          "items": {"$ref": "#/$defs/skill"}
         }
       }
     },
     "skill": {
-      "description": "A skill keyed by its name within the pack.",
       "type": "object",
       "additionalProperties": false,
       "required": ["name", "is_active", "enabled_by_default"],

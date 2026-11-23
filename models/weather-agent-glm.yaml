@@ -84,7 +84,5 @@ model:
   access_control: null
   is_active: true
   enabled_by_default: true
-  organization_id: platform
-  visibility: public
 eval:
   variant: null

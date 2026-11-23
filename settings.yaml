@@ -1,4 +1,2 @@
 schema_version: 1
-settings:
-  TASK_MODEL: ''
-  TASK_MODEL_EXTERNAL: ''
+settings: {}
