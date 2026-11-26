@@ -10,6 +10,7 @@
       "type": "object",
       "additionalProperties": false,
       "properties": {
+        "SKILLS_ON_DEMAND": {"description": "Serve skills through read_skill and run_skill.", "enum": ["true", "false"]}
       }
     }
   }

@@ -82,4 +82,4 @@ model:
   is_active: true
   enabled_by_default: true
 eval:
-  variant: null
+  variant: skills_on_demand
